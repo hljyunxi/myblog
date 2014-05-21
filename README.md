@@ -1,4 +1,1 @@
-myblog
-======
-
-python tornado markdown blog
+![](blog.jpg)
