@@ -62,7 +62,7 @@ class Jinja2Engine(object):
     def render(self, template, data={}, **kwargs):
         udata = {}
         for k, v in data.iteritems():
-            udata[to_unicode(k)] = to_unicode(v)
+            udata[to_unicode(k, self._data_encoding)] = to_unicode(v, self._data_encoding)
         o_template = self._load_template(template, kwargs.get('from_string', False))
         output = o_template.render(udata)
         if self._output_encoding:

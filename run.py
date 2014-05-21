@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#coding: utf8
+
 import sys, os
 import fnmatch
 from datetime import datetime
@@ -21,7 +24,6 @@ def format_post(item):
 
 def get_post_dir():
     return os.path.dirname(os.path.abspath(__file__)) + '/templates/posts'
-
 
 def get_post_items():
     items = os.listdir(get_post_dir())
@@ -49,9 +51,28 @@ class MainHandler(tornado.web.RequestHandler):
         })
         self.write(str(template))
 
+class PostHandler(tornado.web.RequestHandler):
+    def get(self, *args, **kwargs):
+        assert kwargs['post_name']
+        post_name = kwargs.get('post_name').encode(config.default_encoding)
+        
+        post = None
+        for i in get_post_items():
+            if fnmatch.fnmatch(i, '*_%s.md'%post_name):
+                post = i
+                break
+        else:
+            self.write('Not Found')
+            return
+        
+        template = render('post.html', data={
+            'content': markdown(open('templates/posts/%s'%post).read())
+        })
+        self.write(template)
 
 application = tornado.web.Application([
     (r"/", MainHandler),
+    (r"/post/(?P<post_name>.*)", PostHandler),
     (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': 'static/js'}),
     (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': 'static/img'}),
     (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': 'static/css'}),
