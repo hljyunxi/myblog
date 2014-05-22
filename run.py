@@ -66,9 +66,10 @@ class PostHandler(tornado.web.RequestHandler):
             return
         
         template = render('post.html', data={
-            'content': markdown(open('templates/posts/%s'%post).read())
+            'content': markdown(open('templates/posts/%s'%post).read().decode(config.default_encoding))
         })
         self.write(template)
+
 
 application = tornado.web.Application([
     (r"/", MainHandler),
