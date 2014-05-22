@@ -80,5 +80,7 @@ application = tornado.web.Application([
 ])
 
 if __name__ == '__main__':
+    import daemon
+    daemon.daemon('./tornado.pid')
     application.listen(80)
     tornado.ioloop.IOLoop.instance().start()
