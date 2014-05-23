@@ -7,8 +7,8 @@
 
             <br /><br />
 
+            {% for post in posts %}
             <div class="row">
-                {% for post in posts %}
                     <div class="span4">
 
                         <div class="post">
@@ -17,9 +17,8 @@
                         </div>
 
                     </div>
-                {% endfor %}
-
             </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
