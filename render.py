@@ -53,7 +53,7 @@ class Jinja2Engine(object):
         }
         env_init_args.update(kwargs.get('env_init', {}))
         self._env = self._jinja2.Environment(**env_init_args)
-        
+
     def _load_template(self, template=None, from_string=None):
         if from_string:
             return self._env.from_string(template)
@@ -72,12 +72,12 @@ class Jinja2Engine(object):
 jinja2_engine = None
 
 def get_render_instance():
-    global jinja2_engine 
+    global jinja2_engine
     if not jinja2_engine:
         with Lock():
             jinja2_engine = Jinja2Engine(**config.templ_config)
 
-    return jinja2_engine 
+    return jinja2_engine
 
 def render(template, data={}, **kwargs):
     return get_render_instance().render(template, data=data, **kwargs)

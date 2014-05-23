@@ -8,29 +8,29 @@ def remove_pidfile(pidfile):
         os.remove(pidfile)
 
 def daemon(pidfile=None, wkdir='.', stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
-    try: 
-        pid = os.fork() 
+    try:
+        pid = os.fork()
         if pid > 0:
             # exit first parent
-            sys.exit(0) 
-    except OSError, e: 
+            sys.exit(0)
+    except OSError, e:
         sys.stderr.write("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
         sys.exit(1)
 
     # decouple from parent environment
-    os.chdir(wkdir) 
-    os.setsid() 
-    os.umask(0) 
+    os.chdir(wkdir)
+    os.setsid()
+    os.umask(0)
 
     # do second fork
-    try: 
-        pid = os.fork() 
+    try:
+        pid = os.fork()
         if pid > 0:
             # exit from second parent
-            sys.exit(0) 
-    except OSError, e: 
+            sys.exit(0)
+    except OSError, e:
         sys.stderr.write("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
-        sys.exit(1) 
+        sys.exit(1)
 
     # redirect standard file descriptors
     si = file(stdin, 'r')
