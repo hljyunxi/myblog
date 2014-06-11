@@ -55,7 +55,7 @@ class PostHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         assert kwargs['post_name']
         post_name = kwargs.get('post_name').encode(config.default_encoding)
-        
+
         post = None
         for i in get_post_items():
             if fnmatch.fnmatch(i, '*_%s.md'%post_name):
@@ -64,7 +64,7 @@ class PostHandler(tornado.web.RequestHandler):
         else:
             self.write('Not Found')
             return
-        
+
         template = render('post.html', data={
             'content': markdown(open('templates/posts/%s'%post).read().decode(config.default_encoding))
         })
@@ -72,7 +72,8 @@ class PostHandler(tornado.web.RequestHandler):
 
 
 application = tornado.web.Application([
-    (r"/", MainHandler),
+    (r"/(.*)", MainHandler),
+    (r"/post_list/(?P<page>.*)", MainHandler),
     (r"/post/(?P<post_name>.*)", PostHandler),
     (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': 'static/js'}),
     (r'/img/(.*)', tornado.web.StaticFileHandler, {'path': 'static/img'}),
